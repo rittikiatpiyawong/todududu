@@ -53,6 +53,8 @@ group :development, :test do
   # RSpec for testing
   gem "rspec-rails"
   gem "factory_bot_rails"
+
+  gem "simplecov", require: false
 end
 
 group :development do
@@ -68,3 +70,5 @@ group :test do
 end
 
 gem "shoulda-matchers", "~> 6.5", :group => :test
+
+gem "rails-controller-testing", "~> 1.0", :group => :test

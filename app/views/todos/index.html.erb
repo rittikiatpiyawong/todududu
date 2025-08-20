@@ -1,40 +1,27 @@
 <div class="container mx-auto px-4 py-6 max-w-2xl" data-controller="todo">
   <!-- Header Section -->
   <div class="bg-white rounded-2xl shadow-xl p-6 mb-6 fade-in">
-    <div class="flex items-center justify-between mb-4">
-      <!-- Profile Section -->
-      <div class="flex items-center space-x-4">
-        <div class="w-32 h-32 bg-blue-500 rounded-full flex items-center justify-center shadow-lg">
-          <!-- Cartoon Avatar -->
-          <%= image_tag "rittikiat.jpeg", alt: "Rittikiat Avatar", class: "w-32 h-32 rounded-full object-cover" %>
-        </div>
-        
-        <div>
-          <h1 class="text-2xl font-bold text-gray-900">Rittikiat Piyawong</h1>
-          <p class="text-gray-600 text-sm">My Personal Todo List</p>
-        </div>
+    <!-- Profile Section - Centered -->
+    <div class="flex flex-col items-center text-center mb-6">
+      <div class="w-32 h-32 bg-blue-500 rounded-full flex items-center justify-center shadow-lg mb-4">
+        <!-- Cartoon Avatar -->
+        <%= image_tag "rittikiat.jpeg", alt: "Rittikiat Avatar", class: "w-32 h-32 rounded-full object-cover" %>
       </div>
       
-      <!-- Brag Document Link -->
-      <div class="flex flex-col items-end space-y-2">
-        <%= link_to brag_document_path, class: "bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:from-purple-600 hover:to-blue-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5" do %>
-          <div class="flex items-center space-x-2">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 23 23">
-              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <span class="hidden sm:inline">My Brag Document</span>
-            <span class="sm:hidden">Brag</span>
-          </div>
-        <% end %>
-        
-        <!-- Date Display -->
-        <div class="text-right">
-          <p class="text-xs text-gray-500">Today</p>
-          <p class="text-sm font-medium text-gray-700">
-            <%= Date.current.strftime("%B %d, %Y") %>
-          </p>
-        </div>
+      <div class="mb-4">
+        <h1 class="text-2xl font-bold text-gray-900">Rittikiat Piyawong</h1>
+        <p class="text-gray-600 text-sm">My Personal Todo List</p>
       </div>
+      
+      <!-- Brag Document Link - Below Profile -->
+      <%= link_to brag_document_path, class: "bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:from-purple-600 hover:to-blue-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5" do %>
+        <div class="flex items-center space-x-2">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 23 23">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span>My Brag Document</span>
+        </div>
+      <% end %>
     </div>
     
     <!-- Statistics -->
