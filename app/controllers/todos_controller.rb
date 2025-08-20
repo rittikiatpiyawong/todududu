@@ -1,4 +1,5 @@
 class TodosController < ApplicationController
+  before_action :set_todo, only: [ :destroy ]
   def index
     @todos = Todo.recent
     @todo = Todo.new
@@ -23,9 +24,18 @@ class TodosController < ApplicationController
   end
 
   def destroy
+    @todo.destroy
+    respond_to do |format|
+      format.html { redirect_to root_path }
+      format.turbo_stream
+    end
   end
 
   private
+
+  def set_todo
+    @todo = Todo.find(params[:id])
+  end
 
   def todo_params
     params.require(:todo).permit(:title, :completed)

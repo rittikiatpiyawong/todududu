@@ -1,4 +1,1 @@
-<div>
-  <h1 class="font-bold text-4xl">Todos#destroy</h1>
-  <p>Find me in app/views/todos/destroy.html.erb</p>
-</div>
+<%= turbo_stream.replace "todos", partial: "todos/todos_list", locals: { todos: Todo.recent } %>
