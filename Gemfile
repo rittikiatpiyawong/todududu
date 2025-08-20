@@ -64,5 +64,7 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
-  gem "cucumber-rails"
+  gem "cucumber-rails", require: false
 end
+
+gem "shoulda-matchers", "~> 6.5", :group => :test
