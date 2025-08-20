@@ -1,4 +1,77 @@
-<div>
-  <h1 class="font-bold text-4xl">Todos#index</h1>
-  <p>Find me in app/views/todos/index.html.erb</p>
+<div class="container mx-auto px-4 py-6 max-w-2xl" data-controller="todo">
+  <!-- Header Section -->
+  <div class="bg-white rounded-2xl shadow-xl p-6 mb-6 fade-in">
+    <div class="flex items-center justify-between mb-4">
+      <!-- Profile Section -->
+      <div class="flex items-center space-x-4">
+        <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center shadow-lg">
+          <!-- Cartoon Avatar -->
+          <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 6.5V9C15 10.66 13.66 12 12 12C10.34 12 9 10.66 9 9V6.5L3 7V9C3 11.76 5.24 14 8 14V16H7V18H17V16H16V14C18.76 14 21 11.76 21 9Z"/>
+          </svg>
+        </div>
+        
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Rittikiat Piyawong</h1>
+          <p class="text-gray-600 text-sm">My Personal Todo List</p>
+        </div>
+      </div>
+      
+      <!-- Brag Document Link -->
+      <div class="flex flex-col items-end space-y-2">
+        <%= link_to brag_document_path, class: "bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:from-purple-600 hover:to-blue-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5" do %>
+          <div class="flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 23 23">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="hidden sm:inline">My Brag Document</span>
+            <span class="sm:hidden">Brag</span>
+          </div>
+        <% end %>
+        
+        <!-- Date Display -->
+        <div class="text-right">
+          <p class="text-xs text-gray-500">Today</p>
+          <p class="text-sm font-medium text-gray-700">
+            <%= Date.current.strftime("%B %d, %Y") %>
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Statistics -->
+    <div id="todo_stats" data-controller="todo-stats" class="grid grid-cols-3 gap-4 mt-6">
+      <div class="text-center p-3 bg-blue-50 rounded-lg">
+        <p class="text-2xl font-bold text-blue-600" data-todo-stats-target="total"><%= @total_count %></p>
+        <p class="text-xs text-blue-800">Total</p>
+      </div>
+      <div class="text-center p-3 bg-yellow-50 rounded-lg">
+        <p class="text-2xl font-bold text-yellow-600" data-todo-stats-target="pending"><%= @pending_count %></p>
+        <p class="text-xs text-yellow-800">Pending</p>
+      </div>
+      <div class="text-center p-3 bg-green-50 rounded-lg">
+        <p class="text-2xl font-bold text-green-600" data-todo-stats-target="completed"><%= @completed_count %></p>
+        <p class="text-xs text-green-800">Completed</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Todo Form -->
+  <div class="bg-white rounded-2xl shadow-xl p-6 mb-6 slide-in">
+    <%= form_with model: @todo, data: { turbo_stream: true }, class: "flex space-x-3" do |form| %>
+      <div class="flex-1">
+        <%= form.text_field :title, 
+            placeholder: "Add a new todo...", 
+            class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200",
+            required: true,
+            maxlength: 255 %>
+      </div>
+      
+      <%= form.submit "+", 
+          class: "bg-green-500 text-white w-12 h-12 rounded-lg font-bold text-xl hover:from-green-600 hover:to-teal-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center" %>
+    <% end %>
+  </div>
+
+  <!-- Todo List -->
+  <%= render partial: "todos/todos_list", locals: { todos: @todos } %>
 </div>
