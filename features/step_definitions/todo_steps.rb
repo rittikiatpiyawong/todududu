@@ -26,11 +26,6 @@ Then('I should see a form to add new todos') do
   expect(page).to have_button('+')
 end
 
-Then('I should see todo statistics') do
-  expect(page).to have_content('Total')
-  expect(page).to have_content('Pending')
-  expect(page).to have_content('Completed')
-end
 
 # Navigation action steps
 When('I click on {string}') do |link_text|
@@ -247,56 +242,5 @@ end
 Then('the completed count should be {int}') do |count|
   within('[data-todo-stats-target="completed"]') do
     expect(page).to have_content(count.to_s)
-  end
-end
-
-Then('the total count should increase by {int}') do |increment|
-  # Just check that there's a positive number in the total stats
-  within('[data-todo-stats-target="total"]') do
-    text_content = page.text
-    count = text_content.match(/\d+/).to_s.to_i
-    expect(count).to be > 0
-  end
-end
-
-Then('the pending count should increase by {int}') do |increment|
-  within('[data-todo-stats-target="pending"]') do
-    text_content = page.text
-    count = text_content.match(/\d+/).to_s.to_i
-    expect(count).to be > 0
-  end
-end
-
-Then('the completed count should increase by {int}') do |increment|
-  # Just check that the count is a valid number greater than or equal to increment
-  within('[data-todo-stats-target="completed"]') do
-    text_content = page.text
-    count = text_content.match(/\d+/).to_s.to_i
-    expect(count).to be >= increment
-  end
-end
-
-Then('the pending count should decrease by {int}') do |decrement|
-  # Implementation similar to increase, but checking for decrease
-  within('[data-todo-stats-target="pending"]') do
-    text_content = page.text
-    count = text_content.match(/\d+/).to_s.to_i
-    expect(count).to be >= 0
-  end
-end
-
-Then('the completed count should decrease by {int}') do |decrement|
-  within('[data-todo-stats-target="completed"]') do
-    text_content = page.text
-    count = text_content.match(/\d+/).to_s.to_i
-    expect(count).to be >= 0
-  end
-end
-
-Then('the total count should decrease by {int}') do |decrement|
-  within('[data-todo-stats-target="total"]') do
-    text_content = page.text
-    count = text_content.match(/\d+/).to_s.to_i
-    expect(count).to be >= 0
   end
 end

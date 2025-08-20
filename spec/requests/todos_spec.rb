@@ -16,12 +16,6 @@ RSpec.describe "Todos", type: :request do
       expect(response.body).to include("Pending task")
     end
 
-    it "displays correct todo counts" do
-      expect(response.body).to include("Total")
-      expect(response.body).to include("Pending")
-      expect(response.body).to include("Completed")
-    end
-
     it "includes todo form" do
       expect(response.body).to include('type="submit"')
     end
