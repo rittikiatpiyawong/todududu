@@ -23,22 +23,6 @@
         </div>
       <% end %>
     </div>
-    
-    <!-- Statistics -->
-    <div id="todo_stats" data-controller="todo-stats" class="grid grid-cols-3 gap-4 mt-6">
-      <div class="text-center p-3 bg-blue-50 rounded-lg">
-        <p class="text-2xl font-bold text-blue-600" data-todo-stats-target="total"><%= @total_count %></p>
-        <p class="text-xs text-blue-800">Total</p>
-      </div>
-      <div class="text-center p-3 bg-yellow-50 rounded-lg">
-        <p class="text-2xl font-bold text-yellow-600" data-todo-stats-target="pending"><%= @pending_count %></p>
-        <p class="text-xs text-yellow-800">Pending</p>
-      </div>
-      <div class="text-center p-3 bg-green-50 rounded-lg">
-        <p class="text-2xl font-bold text-green-600" data-todo-stats-target="completed"><%= @completed_count %></p>
-        <p class="text-xs text-green-800">Completed</p>
-      </div>
-    </div>
   </div>
 
   <!-- Add Todo Form -->
