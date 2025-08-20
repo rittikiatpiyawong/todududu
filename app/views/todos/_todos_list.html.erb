@@ -1,0 +1,15 @@
+<div id="todos" class="space-y-3">
+  <% if todos.any? %>
+    <%= render todos %>
+  <% else %>
+    <div class="text-center py-12">
+      <div class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+        <svg class="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 23 23">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <h3 class="text-xl font-medium text-gray-900 mb-2">No todos yet!</h3>
+      <p class="text-gray-500">Add your first todo to get started.</p>
+    </div>
+  <% end %>
+</div>

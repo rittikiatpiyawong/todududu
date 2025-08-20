@@ -1,0 +1,35 @@
+<div id="<%= dom_id(todo) %>" class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 slide-in" data-todo-status="<%= todo.completed ? 'completed' : 'pending' %>">
+  <div class="p-4 flex items-center space-x-4">
+    <!-- Checkbox -->
+    <%= form_with model: todo, url: toggle_todo_path(todo), method: :patch, class: "flex-shrink-0 " do |form| %>
+      <button type="submit" class="relative">
+        <div class="w-6 h-6 border-2 border-gray-300 rounded-full flex items-center justify-center <%= 'bg-green-500 border-green-500' if todo.completed %>">
+          <% if todo.completed %>
+            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+          <% end %>
+        </div>
+      </button>
+    <% end %>
+    
+    <!-- Todo Title -->
+    <div class="flex-1 min-w-0">
+      <p class="text-gray-900 <%= 'line-through text-gray-500' if todo.completed %> truncate">
+        <%= todo.title %>
+      </p>
+      <p class="text-xs text-gray-400 mt-1">
+        <%= time_ago_in_words(todo.created_at) %> ago
+      </p>
+    </div>
+    
+    <!-- Delete Button -->
+    <%= link_to todo_path(todo), 
+        data: { turbo_method: :delete },
+        class: "flex-shrink-0 text-red-500 hover:text-red-700 transition-colors duration-200 p-2 hover:bg-red-50 rounded-lg" do %>
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zM8 8a1 1 0 012 0v3a1 1 0 11-2 0V8zm4 0a1 1 0 112 0v3a1 1 0 11-2 0V8z" clip-rule="evenodd"></path>
+      </svg>
+    <% end %>
+  </div>
+</div>
