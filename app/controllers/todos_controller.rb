@@ -1,5 +1,5 @@
 class TodosController < ApplicationController
-  before_action :set_todo, only: [ :destroy ]
+  before_action :set_todo, only: [ :destroy, :toggle ]
   def index
     @todos = Todo.recent
     @todo = Todo.new
@@ -25,6 +25,14 @@ class TodosController < ApplicationController
 
   def destroy
     @todo.destroy
+    respond_to do |format|
+      format.html { redirect_to root_path }
+      format.turbo_stream
+    end
+  end
+
+  def toggle
+    @todo.toggle_completed!
     respond_to do |format|
       format.html { redirect_to root_path }
       format.turbo_stream
