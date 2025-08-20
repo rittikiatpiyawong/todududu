@@ -69,6 +69,10 @@ group :test do
   gem "cucumber-rails", require: false
 end
 
-gem "shoulda-matchers", "~> 6.5", :group => :test
+gem "shoulda-matchers", "~> 6.5", group: :test
 
-gem "rails-controller-testing", "~> 1.0", :group => :test
+gem "rails-controller-testing", "~> 1.0", group: :test
+
+gem "database_cleaner", "~> 2.1", group: :test
+
+gem "database_cleaner-active_record", "~> 2.2", group: :test
