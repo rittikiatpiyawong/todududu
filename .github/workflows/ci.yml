@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -22,12 +22,17 @@ jobs:
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
 
+      - name: Scan for vulnerable gems
+        run: |
+          gem install bundler-audit
+          bundle audit check --update
+
   scan_js:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -42,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -55,6 +60,11 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test_type: [rspec, cucumber, system]
+        
+    name: Test (${{ matrix.test_type }})
 
     services:
       postgres:
@@ -66,18 +76,12 @@ jobs:
           - 5432:5432
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
-      # redis:
-      #   image: redis
-      #   ports:
-      #     - 6379:6379
-      #   options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
-
     steps:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev pkg-config google-chrome-stable
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -85,16 +89,68 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Run tests
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Cache Tailwind CSS build
+        uses: actions/cache@v4
+        with:
+          path: |
+            app/assets/builds
+            public/assets
+          key: ${{ runner.os }}-tailwind-${{ hashFiles('**/tailwind.config.*', 'app/assets/tailwind/**') }}
+          restore-keys: |
+            ${{ runner.os }}-tailwind-
+
+      - name: Setup test database
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
-          # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test test:system
+        run: |
+          bin/rails db:create RAILS_ENV=test
+          bin/rails db:schema:load RAILS_ENV=test
+
+      - name: Precompile assets for test environment
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+        run: |
+          echo "🎨 Building Tailwind CSS and precompiling assets..."
+          bin/rails tailwindcss:build RAILS_ENV=test
+          bin/rails assets:precompile RAILS_ENV=test
+
+      - name: Run RSpec tests
+        if: matrix.test_type == 'rspec'
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+        run: |
+          echo "🧪 Running RSpec Unit and Integration Tests..."
+          bundle exec rspec --format progress --format documentation
+
+      - name: Run Cucumber E2E tests
+        if: matrix.test_type == 'cucumber'
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+        run: |
+          echo "🥒 Running Cucumber End-to-End Tests..."
+          bundle exec cucumber --format progress
+
+      - name: Run Rails system tests
+        if: matrix.test_type == 'system'
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+        run: |
+          echo "🖥️ Running Rails System Tests..."
+          bin/rails test:system
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
-        if: failure()
+        if: failure() && matrix.test_type == 'system'
         with:
           name: screenshots
           path: ${{ github.workspace }}/tmp/screenshots
